@@ -190,12 +190,7 @@ export default class CameraScreenBase extends Component {
           <Image
             source={this.props.captureButtonImage}
             resizeMode={'contain'}
-          />
-          <View style={styles.textNumberContainer}>
-            <Text>
-              {this.numberOfImagesTaken()}
-            </Text>
-          </View>
+          />          
 
         </TouchableOpacity>
       </View >
@@ -248,7 +243,7 @@ export default class CameraScreenBase extends Component {
   renderBottomButton(type) {
     let showButton = true;
     if (type === 'right') {
-      showButton = this.state.captureImages.length || this.isCaptureRetakeMode();
+      showButton = false && (this.state.captureImages.length || this.isCaptureRetakeMode());
     }
     if (showButton) {
       const buttonNameSuffix = this.isCaptureRetakeMode() ? 'CaptureRetakeButtonText' : 'ButtonText';
@@ -270,10 +265,10 @@ export default class CameraScreenBase extends Component {
 
   renderBottomButtons() {
     return !this.props.hideControls && (
-      <SafeAreaView style={[styles.bottomButtons, { backgroundColor: '#ffffff00' }]}>
+      <SafeAreaView style={[styles.bottomButtons, { backgroundColor: Platform.OS == 'ios' ? '#ffffff00' : '#00000099' }]}>
         {this.renderBottomButton('left')}
         {this.renderCaptureButton()}
-        {this.renderBottomButton('right')}
+        {this.renderBottomButton('right')}        
       </SafeAreaView>
     );
   }
@@ -290,7 +285,7 @@ export default class CameraScreenBase extends Component {
   }
 
   async onCaptureImagePressed() {
-    const shouldSaveToCameraRoll = !this.props.allowCaptureRetake;
+    const shouldSaveToCameraRoll = this.props.shouldSaveToCameraRoll;
     const image = await this.camera.capture(shouldSaveToCameraRoll);
 
     if (this.props.allowCaptureRetake) {

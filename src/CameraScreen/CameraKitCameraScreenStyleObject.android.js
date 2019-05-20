@@ -16,7 +16,7 @@ export default styleObject = {
     //     padding: 10
     // },
     bottomButtons: {
-        flex: 2,
+        flex: 3,
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 14
