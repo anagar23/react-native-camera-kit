@@ -10,7 +10,7 @@ export default class CameraScreen extends CameraScreenBase {
         {this.renderTopButtons()}
         {this.renderCamera()}
         {this.renderRatioStrip()}
-        {this.renderBottomButtons()}
+        {this.renderiOSBottomButtons()}
       </View>
     );
   }

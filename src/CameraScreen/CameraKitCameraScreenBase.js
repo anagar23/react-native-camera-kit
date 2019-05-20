@@ -9,7 +9,7 @@ import {
   NativeModules,
   Platform,
   SafeAreaView,
-  processColor  
+  processColor,  
 } from 'react-native';
 import _ from 'lodash';
 import CameraKitCamera from './../CameraKitCamera';
@@ -215,9 +215,9 @@ export default class CameraScreenBase extends Component {
     );
   }
 
-  sendBottomButtonPressedAction(type, captureRetakeMode, image) {
+  sendBottomButtonPressedAction(type, captureRetakeMode, image, data) {
     if (this.props.onBottomButtonPressed) {
-      this.props.onBottomButtonPressed({ type, captureImages: this.state.captureImages, captureRetakeMode, image })
+      this.props.onBottomButtonPressed({ type, captureImages: this.state.captureImages, captureRetakeMode, image, data })
     }
   }
 
@@ -265,11 +265,27 @@ export default class CameraScreenBase extends Component {
 
   renderBottomButtons() {
     return !this.props.hideControls && (
-      <SafeAreaView style={[styles.bottomButtons, { backgroundColor: Platform.OS == 'ios' ? '#ffffff00' : '#00000099' }]}>
-        {this.renderBottomButton('left')}
-        {this.renderCaptureButton()}
-        {this.renderBottomButton('right')}        
-      </SafeAreaView>
+      <View style={styles.mainContainer}>
+        <View style={[styles.topTitleContainer, {backgroundColor: this.props.viewBackgroundColor}]}>
+          <Text style={styles.containerText}>Place card at center of the screen</Text>
+        </View>
+        <View style={[styles.captureContainer, {height: this.props.captureViewHeight}]} ref={view => { this.myCenterView = view; }} pointerEvents="none" ></View>
+        <SafeAreaView style={[styles.bottomButtons, { backgroundColor: this.props.viewBackgroundColor}]}>
+          {this.renderBottomButton('left')}
+          {this.renderCaptureButton()}
+          {this.renderBottomButton('right')}        
+        </SafeAreaView>
+      </View>
+    );
+  }
+
+  renderiOSBottomButtons() {
+    return !this.props.hideControls && (
+        <SafeAreaView style={[styles.bottomButtons, { backgroundColor: this.props.viewBackgroundColor}]}>
+          {this.renderBottomButton('left')}
+          {this.renderCaptureButton()}
+          {this.renderBottomButton('right')}        
+        </SafeAreaView>      
     );
   }
 
@@ -294,7 +310,14 @@ export default class CameraScreenBase extends Component {
       if (image) {
         this.setState({ captured: true, imageCaptured: image, captureImages: _.concat(this.state.captureImages, image) });
       }
-      this.sendBottomButtonPressedAction('capture', false, image);
+      if (Platform.OS == 'ios') {
+        this.sendBottomButtonPressedAction('capture', false, image, null);
+      } else {
+        this.myCenterView.measureInWindow((fx, fy, width, height) => {
+          const viewData = {fx, fy, width, height};
+          this.sendBottomButtonPressedAction('capture', false, image, viewData);
+        });       
+      }
     }
   }
 

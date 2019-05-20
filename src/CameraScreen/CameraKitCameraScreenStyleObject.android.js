@@ -8,15 +8,8 @@ export default styleObject = {
         left: 0,
         width, height
     },
-    // bottomButtons: {
-    //     flex: 2,
-    //     backgroundColor: 'transparent',
-    //     flexDirection: 'row',
-    //     justifyContent: 'space-between',
-    //     padding: 10
-    // },
     bottomButtons: {
-        flex: 3,
+        flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 14
@@ -24,5 +17,21 @@ export default styleObject = {
     gap: {
         flex: 10,
         flexDirection: 'column'
+    },
+    mainContainer: {
+        flex: 1
+    },
+    topTitleContainer: {
+        flex:1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    captureContainer: {
+        height: 270,
+        backgroundColor: 'transparent',
+    },
+    containerText: {
+        fontSize: 17,
+        color: '#FFF'
     },
 };
